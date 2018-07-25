@@ -30,12 +30,12 @@ Article.prototype.toHtml = function () {
       5. publication date. */
 
   $newArticle
-    .find('h1').text(this.blogPost.title)
-    .find('a').text(this.blogPost.author).attr('href', this.blogPost.authorUrl)
-    .find('time').text(this.blogPost.publishedOn);
-
+    .find('h1').text(this.blogPost.title);
+  $newArticle
+    .find('a').text(this.blogPost.author).attr('href', this.blogPost.authorUrl);
+  $newArticle.find('.article-body').html(this.blogPost.body);
   // REVIEW: Display the date as a relative number of 'days ago'
-  $newArticle.find('time').html('about ' + parseInt((new Date() - new Date(this.publishedOn)) / 60 / 60 / 24 / 1000) + ' days ago');
+  $newArticle.find('time').html('about ' + parseInt((new Date() - new Date(this.blogPost.publishedOn)) / 60 / 60 / 24 / 1000) + ' days ago');
   $newArticle.append('<hr>');
   return $newArticle;
 };
@@ -47,10 +47,10 @@ rawData.sort(function (a, b) {
 
 // TODO: Refactor these for loops using the .forEach() array method.
 
-for (let i = 0; i < rawData.length; i++) {
-  articles.push(new Article(rawData[i]));
-}
+rawData.forEach(function (post) {
+  articles.push(new Article(post));
+});
 
-for (let i = 0; i < articles.length; i++) {
-  $('#articles').append(articles[i].toHtml());
-}
+articles.forEach(function (article) {
+  $('#articles').append(article.toHtml());
+});
